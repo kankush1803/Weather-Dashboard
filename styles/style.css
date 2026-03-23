@@ -71,3 +71,92 @@ body {
 /* END OF MOBILE STYLES */
 
 
+
+ul {
+  margin: 0;
+  padding: 5px;
+  transition: 0.3s;
+}
+
+.navbar li {
+  margin: 0 0;
+  padding: 5px;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+.navbar li a {
+  font-size: 25px;
+  color: #fff;
+  padding: 5px 10px;
+  text-decoration: none;
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.navbar .search-city {
+  width: 25vw;
+  height: 5.75vh;
+  font-size: 18.75px;
+}
+
+.search-city {
+  letter-spacing: 0.50px;
+  padding-left: 20px;
+  background: rgba(0, 0, 0, 0.50);
+  border: none;
+  color: #fff;
+  border-radius: 50px;
+  outline: none;
+}
+
+.navbar a:hover:not(.repo-link) {
+  background: #000;
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.location-name {
+  font-weight: 400;
+  text-align: center;
+  color: #fff;
+}
+
+.temperature-container {
+  text-align: center;
+  margin: auto;
+  font-size: 50px;
+}
+
+.temperature-icon {
+  margin-bottom: -15px;
+  padding: 0;
+}
+
+.temperature-value {
+  margin-top: -15px;
+  padding: 0;
+  color: #fff;
+}
+
+.weather-type {
+  font-weight: 400;
+  text-align: center;
+  color: #fff;
+}
+
+.additionals-first-row,
+.additionals-second-row {
+  font-size: 12.5px;
+  width: 100%;
+  text-align: center;
+}
+
+.additionals-first-row {
+  margin-bottom: 12.5px;
+}
+
+.additionals-second-row {
+  margin-top: 12.5px;
+}
+
