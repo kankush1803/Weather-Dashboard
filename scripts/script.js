@@ -30,5 +30,33 @@ document.body.style.background = "linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 
 cityInput.addEventListener("keyup", function (event) {
   if (event.key === "Enter") {
     loader();
-  }
-});
+
+    document.getElementById("locationName").innerHTML = "";
+      document.getElementById("temperatureValue").innerHTML = "";
+      document.getElementById("weatherType").innerHTML = "";
+
+      const img1 = document.createElement("img");
+      const img2 = document.createElement("img");
+      const img3 = document.createElement("img");
+
+      img1.id = "loader1";
+      img2.id = "loader2";
+      img3.id = "loader3";
+
+      img1.src = "icons/loader.gif";
+      img2.src = "icons/loader.gif";
+      img3.src = "icons/loader.gif";
+
+      const parentElement1 = document.getElementById("locationName");
+      const parentElement2 = document.getElementById("temperatureValue");
+      const parentElement3 = document.getElementById("weatherType");
+
+      parentElement1.appendChild(img1);
+      parentElement2.appendChild(img2);
+      parentElement3.appendChild(img3);
+
+      // document.getElementById("loader1").src = "icons/loader.gif";
+      // document.getElementById("loader2").src = "icons/loader.gif";
+      // document.getElementById("loader3").src = "icons/loader.gif";
+    }
+  });
