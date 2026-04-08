@@ -1,16 +1,20 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
-    <!-- icon -->
-    <link rel="icon" type="image/x-icon" href="icons/favicon.ico">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexaWeather — Smart City Dashboard</title>
 
-    <!-- css -->
-    <link rel="stylesheet" href="styles/style.css">
+  <!-- css -->
+  <link rel="stylesheet" href="styles/style.css">
 
-    <!-- images -->
+
+  
+
+
+  <!-- images -->
     <link rel="prefetch" href="media/day1.jpg">
     <link rel="prefetch" href="media/day2.jpg">
     <link rel="prefetch" href="media/day3.jpg">
@@ -31,196 +35,172 @@
     <link rel="prefetch" href="media/night3.jpg">
     <link rel="prefetch" href="media/night4.jpg">
     <link rel="prefetch" href="media/night5.jpg">
-    <!-- icon -->
-    <link rel="prefetch" href="icons/loader.gif">
 
-    <!-- googleapis and fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            /* background-image: linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5)) , url('media/day1.jpg'); */
-            
-            background-size: cover; 
-            
-
-        /* Added background-repeat and set it to no-repeat to help prevent the images from duplicating. I added !important to 
-         * background-repeat and background-size in order to place importance on the background images not repeating and
-         * to cover the entire webpage. 
-         */
-            background-repeat: no-repeat !important;
-            background-size: cover !important;
-            background-attachment: fixed;
-
-            height: 100vh;
-        }
-
-        @media (max-width: 600px) {
-            body {
-            height: 100%;
-        }
-    }
-  </style>
-
+  <!-- Google Fonts: Space Mono for data readouts, Outfit for UI text -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
 </head>
-<body>
-    <ul class="navbar">
-        <li style="float: left; margin-left: -10px;" class="forecast"><a class="repo-link"
-            href="https://github.com/kankush1803/Weather-Dashboard">⛄ Forecast</a></li>
-            
-        <li><a id="resetBtn" href="#">⟳</a></li>
-        
-        <li><input spellcheck="false" class="search-city" id="searchCity" type="text" autocomplete="off"
-            placeholder="🔍︎ Search City"></li>
-    </ul>
-
-    <ul class="mobile-navbar">
-        <li><input spellcheck="false" class="mobile-search-city" id="mobileSearchCity" type="text" autocomplete="off"
-            placeholder="Search City..."></li>
-    </ul>
-
-    <h1 class="location-name" id="locationName">Search City...</h1>
-
-    <div class="temperature-container">
-        <div class="temperature-icon"><img class="imgs-as-icons" src="icons/sunny.png"></div>
-        <div class="temperature-value" id="temperatureValue"></div>
+<body class="theme-moderate">
+ 
+  <!-- Animated background grid -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow" id="bgGlow"></div>
+ 
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text">NEXA<strong>WEATHER</strong></span>
+        <span class="logo-tag">SMART CITY v2.0</span>
+      </div>
+      <div class="header-right">
+        <span class="live-badge">● LIVE</span>
+        <span class="clock" id="clock">--:--:--</span>
+      </div>
     </div>
-
-    <h2 class="weather-type" id="weatherType"></h2>
-
-    <div class="additionals-first-row">
-        <span class="air-quality-additional">
-        <span class="air-quality-additional-label">Air Quality Index </span>
-        <span class="air-quality-index-additional-value">Moderate</span>
-    </span>
-
-    <span class="real-feel-additional">
-      <span class="real-feel-additional-label">Real Feel </span>
-      <span class="real-feel-additional-value" id="realFeelAdditionalValue">-</span>
-    </span>
-
-    <span class="humidity-additional">
-      <span class="humidity-additional-label">Humidity </span>
-      <span class="humidity-additional-value" id="humidityAdditionalValue">-</span>
-    </span>
-
-    <span class="max-temperature-additional">
-      <span class="max-temperature-additional-label">Highest Temperature </span>
-      <span class="max-temperature-additional-value" id="maxTemperatureAdditionalValue">-</span>
-    </span>
-
-    <span class="min-temperature-additional">
-      <span class="min-temperature-additional-label">Lowest Temperature </span>
-      <span class="min-temperature-additional-value" id="minTemperatureAdditionalValue">-</span>
-    </span>
-  </div>
-
-  <div class="additionals-second-row">
-    <span class="wind-speed-additional">
-      <span class="wind-speed-additional-label">Wind Speed </span>
-      <span class="wind-speed-additional-value" id="windSpeedAdditionalValue">-</span>
-    </span>
-
-    <span class="wind-direction-additional">
-      <span class="wind-direction-additional-label">Wind Direction </span>
-      <span class="wind-direction-additional-value" id="windDirectionAdditionalValue">-</span>
-    </span>
-
-    <span class="visibility-additional">
-      <span class="visibility-additional-label">Visibility </span>
-      <span class="visibility-additional-value" id="visibilityAdditionalValue">-</span>
-    </span>
-
-    <span class="pressure-additional">
-      <span class="pressure-additional-label">Pressure </span>
-      <span class="pressure-additional-value" id="pressureAdditionalValue">-</span>
-    </span>
-
-    <span class="sunrise-additional">
-      <span class="sunrise-additional-label">Sunrise </span>
-      <span class="sunrise-additional-value" id="sunriseAdditionalValue">-</span>
-    </span>
-
-    <span class="sunset-additional">
-      <span class="sunset-additional-label">Sunset </span>
-      <span class="sunset-additional-value" id="sunsetAdditionalValue">-</span>
-    </span>
-  </div>
-
-  <br>
-  <!-- <div class="separator"></div> -->
-
-  <div class="daily-forecast">
-
-    <h2 class="daily-forecast-label">Daily</h2>
-
-    <div id="forecast-container" class="forecast-container">
-      
-        <div class="daily-forecast-card">
-          <p class="daily-forecast-date">Fri 27</p>
-          <div class="daily-forecast-logo"><img class="imgs-as-icons" src="icons/sunny.png"></div>
-          <div class="max-min-temperature-daily-forecast">
-            <span class="max-daily-forecast">37<sup>o</sup>C</span>
-            <span class="min-daily-forecast">25<sup>o</sup>C</span>
-          </div>
-          <p class="weather-type-daily-forecast">Sunny</p>
-        </div>
-
-        <div class="daily-forecast-card">
-          <p class="daily-forecast-date">Fri 27</p>
-          <div class="daily-forecast-logo"><img class="imgs-as-icons" src="icons/sunny.png"></div>
-          <div class="max-min-temperature-daily-forecast">
-            <span class="max-daily-forecast">37<sup>o</sup>C</span>
-            <span class="min-daily-forecast">25<sup>o</sup>C</span>
-          </div>
-          <p class="weather-type-daily-forecast">Sunny</p>
-        </div>
-
-        <div class="daily-forecast-card">
-          <p class="daily-forecast-date">Fri 27</p>
-          <div class="daily-forecast-logo"><img class="imgs-as-icons" src="icons/sunny.png"></div>
-          <div class="max-min-temperature-daily-forecast">
-            <span class="max-daily-forecast">37<sup>o</sup>C</span>
-            <span class="min-daily-forecast">25<sup>o</sup>C</span>
-          </div>
-          <p class="weather-type-daily-forecast">Sunny</p>
-        </div>
-
-        <div class="daily-forecast-card">
-          <p class="daily-forecast-date">Fri 27</p>
-          <div class="daily-forecast-logo"><img class="imgs-as-icons" src="icons/sunny.png"></div>
-          <div class="max-min-temperature-daily-forecast">
-            <span class="max-daily-forecast">37<sup>o</sup>C</span>
-            <span class="min-daily-forecast">25<sup>o</sup>C</span>
-          </div>
-          <p class="weather-type-daily-forecast">Sunny</p>
-        </div>
-
-        <div class="daily-forecast-card">
-          <p class="daily-forecast-date">Fri 27</p>
-          <div class="daily-forecast-logo"><img class="imgs-as-icons" src="icons/sunny.png"></div>
-          <div class="max-min-temperature-daily-forecast">
-              <span class="max-daily-forecast">37<sup>o</sup>C</span>
-              <span class="min-daily-forecast">25<sup>o</sup>C</span>
-          </div>
-          <p class="weather-type-daily-forecast">Sunny</p>
-        </div>
-
-        <div class="daily-forecast-card">
-          <p class="daily-forecast-date">Fri 27</p>
-          <div class="daily-forecast-logo"><img class="imgs-as-icons" src="icons/sunny.png"></div>
-          <div class="max-min-temperature-daily-forecast">
-            <span class="max-daily-forecast">37<sup>o</sup>C</span>
-            <span class="min-daily-forecast">25<sup>o</sup>C</span>
-          </div>
-          <p class="weather-type-daily-forecast">Sunny</p>
-        </div>
+  </header>
+ 
+  <!-- ===== SEARCH BAR ===== -->
+  <section class="search-section">
+    <div class="search-wrapper">
+      <div class="search-box">
+        <span class="search-icon">⌕</span>
+        <input
+          type="text"
+          id="cityInput"
+          class="search-input"
+          placeholder="Enter city name…"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button class="search-btn" id="searchBtn" aria-label="Search">
+          <span>SCAN</span>
+        </button>
+      </div>
+      <button class="locate-btn" id="locateBtn" title="Use my location">
+        <span class="locate-icon">◎</span>
+        <span>AUTO-LOCATE</span>
+      </button>
     </div>
+  </section>
+ 
+  <!-- ===== LOADING SPINNER ===== -->
+  <div class="loader-overlay" id="loaderOverlay" hidden>
+    <div class="loader-ring"></div>
+    <p class="loader-text">FETCHING ATMOSPHERIC DATA…</p>
   </div>
-    
-</body>
-<script src="scripts/mobile.js"></script>
-<script src="scripts/script.js"></script>
+ 
+  <!-- ===== ERROR MESSAGE ===== -->
+  <div class="error-banner" id="errorBanner" hidden>
+    <span class="error-icon">⚠</span>
+    <span id="errorText">Something went wrong.</span>
+    <button class="error-close" id="errorClose">✕</button>
+  </div>
+ 
+  <!-- ===== MAIN DASHBOARD ===== -->
+  <main class="dashboard" id="dashboard" hidden>
+ 
+    <!-- Current Weather Card -->
+    <section class="current-card glass-card" id="currentCard">
+      <div class="current-top">
+        <div class="city-info">
+          <h1 class="city-name" id="cityName">—</h1>
+          <p class="city-meta" id="cityMeta">—</p>
+          <p class="weather-desc" id="weatherDesc">—</p>
+        </div>
+        <div class="weather-icon-wrap">
+          <div class="weather-icon" id="weatherIcon">🌤</div>
+          <div class="icon-glow"></div>
+        </div>
+      </div>
+ 
+      <div class="temp-display">
+        <span class="temp-value" id="tempValue">--</span>
+        <span class="temp-unit">°C</span>
+      </div>
+ 
+      <!-- Stats row -->
+      <div class="stats-row">
+        <div class="stat-chip">
+          <span class="stat-label">HUMIDITY</span>
+          <span class="stat-value" id="humidity">--%</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-label">WIND</span>
+          <span class="stat-value" id="wind">-- km/h</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-label">FEELS LIKE</span>
+          <span class="stat-value" id="feelsLike">--°C</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-label">VISIBILITY</span>
+          <span class="stat-value" id="visibility">-- km</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-label">PRESSURE</span>
+          <span class="stat-value" id="pressure">-- hPa</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-label">UV INDEX</span>
+          <span class="stat-value" id="uvIndex">--</span>
+        </div>
+      </div>
+    </section>
+ 
+    <!-- What to Wear Panel -->
+    <section class="wear-card glass-card" id="wearCard">
+      <h2 class="card-title"><span class="title-accent">◈</span> ADVISORY INTEL</h2>
+      <div class="wear-list" id="wearList">
+        <!-- Dynamically injected -->
+      </div>
+    </section>
+ 
+    <!-- 5-Day Forecast -->
+    <section class="forecast-section">
+      <h2 class="section-title"><span class="title-accent">◈</span> 5-DAY FORECAST</h2>
+      <div class="forecast-grid" id="forecastGrid">
+        <!-- Dynamically injected -->
+      </div>
+    </section>
+ 
+    <!-- Sun / Moon times -->
+    <section class="sun-card glass-card">
+      <h2 class="card-title"><span class="title-accent">◈</span> SUN CYCLE</h2>
+      <div class="sun-row">
+        <div class="sun-item">
+          <span class="sun-icon">☀</span>
+          <span class="sun-label">SUNRISE</span>
+          <span class="sun-time" id="sunrise">--:--</span>
+        </div>
+        <div class="sun-track">
+          <div class="sun-arc"></div>
+          <div class="sun-ball" id="sunBall"></div>
+        </div>
+        <div class="sun-item">
+          <span class="sun-icon">🌙</span>
+          <span class="sun-label">SUNSET</span>
+          <span class="sun-time" id="sunset">--:--</span>
+        </div>
+      </div>
+    </section>
+ 
+  </main>
+ 
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <span>NexaWeather © 2026 — Powered by OpenWeatherMap</span>
+    <span class="footer-dot">•</span>
+    <span>Smart City Infrastructure Data</span>
+  </footer>
+ 
+  
+  
+
+  </body>
+
+  <script src="scripts/script.js"></script>
+  <script src="scripts/mobile.js"></script>
 </html>
+ 
