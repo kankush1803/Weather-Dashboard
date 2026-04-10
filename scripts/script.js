@@ -11,7 +11,7 @@ const BASE    = 'https://api.openweathermap.org/data/2.5';
 const cityInput = document.getElementById('cityInput');
 const searchBtn = document.getElementById('searchBtn');
 const locateBtn = document.getElementById('locateBtn');
-const loaderOverlay = document.getElementById('loaderOverlay');
+const loaderEl = document.getElementById('loader');
 const errorBanner = document.getElementById('errorBanner');
 const errorText = document.getElementById('errorText');
 const errorClose = document.getElementById('errorClose');
@@ -27,8 +27,8 @@ setInterval(updateClock, 1000);
 updateClock();
 
 // Show / Hide helpers
-function showLoader()  { loaderOverlay.hidden = false; dashboard.hidden = true; }
-function hideLoader()  { loaderOverlay.hidden = true; }
+function showLoader()  { loaderEl.hidden = false; dashboard.hidden = true; }
+function hideLoader()  { loaderEl.hidden = true; }
 function showDashboard() { dashboard.hidden = false; }
  
 function showError(msg) {
@@ -138,64 +138,70 @@ function renderForecast(forecastList) {
  
   // OWM returns 3-hour slots; pick one per day at ~12:00 UTC
   const dailyMap = {};
-  forecastList.forEach(item => {
-    const date   = new Date(item.dt * 1000);
-    const dayKey = date.toDateString();
-    const hour   = date.getUTCHours();
-    // prefer noon slot, otherwise first seen
-    if (!dailyMap[dayKey] || Math.abs(hour - 12) < Math.abs(new Date(dailyMap[dayKey].dt * 1000).getUTCHours() - 12)) {
-      dailyMap[dayKey] = item;
-    }
-  });
 
-  // up to 5 days
-  const days  = Object.keys(dailyMap).slice(0, 5);
+forecastList.forEach(item => {
+  const date = new Date(item.dt * 1000);
+  const dayKey = date.toDateString();
+  const hour = date.getHours();
+
+  // prefer data around midday (12–15)
+  if (!dailyMap[dayKey] && hour >= 12 && hour <= 15) {
+    dailyMap[dayKey] = item;
+  }
+
+  // fallback if nothing found yet
+  if (!dailyMap[dayKey]) {
+    dailyMap[dayKey] = item;
+  }
+});
+
+// up to 5 days
   const today = new Date().toDateString();
- 
-  days.forEach((dayKey, idx) => {
-    const item     = dailyMap[dayKey];
-    const date     = new Date(item.dt * 1000);
-    const label    = dayKey === today ? 'TODAY'
-                     : date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
-    const emoji    = getWeatherEmoji(item.weather[0].icon);
-    const desc     = item.weather[0].main;
-    const high     = Math.round(item.main.temp_max);
-    const low      = Math.round(item.main.temp_min);
-    const rain     = Math.round((item.pop || 0) * 100);
- 
+
+Object.values(dailyMap)
+  .slice(0, 5)
+  .forEach((item, idx) => {
+
+    const date  = new Date(item.dt * 1000);
+    const label = date.toDateString() === today
+      ? 'TODAY'
+      : date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+
     const card = document.createElement('div');
     card.className = 'forecast-card';
     card.style.animationDelay = `${idx * 0.1}s`;
+
     card.innerHTML = `
       <div class="forecast-day">${label}</div>
-      <div class="forecast-icon">${emoji}</div>
-      <div class="forecast-desc">${desc}</div>
+      <div class="forecast-icon">${getWeatherEmoji(item.weather[0].icon)}</div>
+      <div class="forecast-desc">${item.weather[0].main}</div>
       <div class="forecast-temps">
-        <span class="forecast-high">${high}°</span>
-        <span class="forecast-low">${low}°</span>
+        <span class="forecast-high">${Math.round(item.main.temp_max)}°</span>
+        <span class="forecast-low">${Math.round(item.main.temp_min)}°</span>
       </div>
-      <div class="forecast-rain">💧 ${rain}%</div>
+      <div class="forecast-rain">💧 ${Math.round((item.pop || 0) * 100)}%</div>
     `;
+
     grid.appendChild(card);
   });
 }
 
  // Format Unix timestamp to time string
 function unixToTime(unix, offset = 0) {
-  const date = new Date((unix + offset) * 1000);
-  return date.toUTCString().slice(17, 22); // "HH:MM"
+  return new Date((unix + offset) * 1000)
+    .toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 }
 
  // Animate sun position on the arc
-function animateSun(sunriseUnix, sunsetUnix) {
-  const now     = Math.floor(Date.now() / 1000);
-  const total   = sunsetUnix - sunriseUnix;
-  const elapsed = now - sunriseUnix;
-  let pct       = Math.max(0, Math.min(1, elapsed / total));
-  // position along an arc; 0% = left, 100% = right, 50% = top
-  const sunBall = document.getElementById('sunBall');
-  sunBall.style.left = `${pct * 100}%`;
-  sunBall.style.top  = `${Math.sin(pct * Math.PI) * -28}px`;
+function animateSun(sunrise, sunset) {
+  if (sunset <= sunrise) return;
+
+  const now = Date.now() / 1000;
+  const pct = Math.max(0, Math.min(1, (now - sunrise) / (sunset - sunrise)));
+
+  const sun = document.getElementById('sunBall');
+  sun.style.left = pct * 100 + '%';
+  sun.style.top  = Math.sin(pct * Math.PI) * -28 + 'px';
 }
 
  // Main render function
@@ -340,20 +346,22 @@ async function fetchByCoords(lat, lon) {
 // Geolocation
 function autoLocate() {
   if (!navigator.geolocation) {
-    showError('Geolocation is not supported by your browser.');
-    return;
+    return showError('Geolocation not supported.');
   }
+
   showLoader();
+
   navigator.geolocation.getCurrentPosition(
-    pos => fetchByCoords(pos.coords.latitude, pos.coords.longitude),
-    err => {
+    ({ coords }) => fetchByCoords(coords.latitude, coords.longitude),
+    ({ code }) => {
       hideLoader();
-      const msgs = {
-        1: 'Location access denied. Please allow location or search manually.',
-        2: 'Location unavailable. Try searching by city name.',
-        3: 'Location request timed out.',
-      };
-      showError(msgs[err.code] || 'Could not determine your location.');
+      const msg = {
+        1: 'Location denied.',
+        2: 'Location unavailable.',
+        3: 'Request timed out.'
+      }[code] || 'Location error.';
+
+      showError(msg);
     },
     { timeout: 10000 }
   );
