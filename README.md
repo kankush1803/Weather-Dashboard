@@ -5,6 +5,10 @@ NexaWeather is a modern, responsive weather dashboard that provides real-time we
 Designed with a futuristic UI and smooth animations, this project combines clean design with practical functionality.
 
 ---
+## Live Demo
+* https://weather-dashboard-mu-lac.vercel.app/
+
+---
 
 
 ## 🚀 Features
