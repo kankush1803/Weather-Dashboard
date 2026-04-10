@@ -6,57 +6,16 @@ Designed with a futuristic UI and smooth animations, this project combines clean
 
 ---
 
+
 ## 🚀 Features
 
-### 🌍 Real-Time Weather
+* 🌍 Search weather by city or auto-detect location
+* 📅 5-day forecast
+* 🧠 Smart “What to Wear” advisory
+* 🌅 Sunrise & sunset with animation
+* 🎨 Dynamic themes (cold / moderate / hot)
+* ⚡ Responsive design + smooth UI
 
-* Search weather by city name
-* Auto-detect location using geolocation
-* Displays:
-
-  * Temperature
-  * Feels like
-  * Humidity
-  * Wind speed
-  * Visibility
-  * Pressure
-
-### 📅 5-Day Forecast
-
-* Clean card-based layout
-* Daily weather summary
-* Rain probability
-* High & low temperatures
-
-### 🧠 Smart Advisory System
-
-* “What to Wear” suggestions
-* Alerts for:
-
-  * Rain ☂️
-  * Heat 🌞
-  * Cold 🧥
-  * Wind 💨
-  * Fog 🌫️
-
-### 🌅 Sun Cycle Visualization
-
-* Sunrise & sunset times
-* Animated sun movement across the sky
-
-### 🎨 Dynamic UI Themes
-
-* Theme changes based on temperature:
-
-  * ❄️ Cold
-  * 🌿 Moderate
-  * 🔥 Hot
-
-### ⚡ Smooth UX
-
-* Loading animation
-* Error handling system
-* Responsive design (mobile + tablet + desktop)
 
 ---
 
@@ -117,13 +76,6 @@ const API_KEY = 'YOUR_API_KEY';
 
 ---
 
-## 📱 Responsive Design
-
-* ✅ Desktop optimized
-* ✅ Tablet layout
-* ✅ Mobile friendly
-
----
 
 ## ✨ Future Improvements
 
@@ -150,13 +102,3 @@ const API_KEY = 'YOUR_API_KEY';
 
 ---
 
-## ⭐ Acknowledgements
-
-* OpenWeatherMap for weather data
-* Google Fonts (Outfit & Space Mono)
-
----
-
-## 💡 License
-
-This project is open-source and available under the MIT License.
